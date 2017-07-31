@@ -73,7 +73,6 @@ void printNodes(std::shared_ptr<BST>& root)
 	}
 }
 
-//Assuming tree has all positive elements
 void printNodesAt_K_DistanceFromRoot(std::shared_ptr<BST> root, int distance)
 {
 	if (root == nullptr)
@@ -81,23 +80,50 @@ void printNodesAt_K_DistanceFromRoot(std::shared_ptr<BST> root, int distance)
 	if (distance == 0)
 		cout << root->data << endl;
 
-	std::shared_ptr<BST> Left = root->left;
-	std::shared_ptr<BST> Right = root->right;
 	std::queue<int> elements;
+	std::queue<shared_ptr<BST>> nodeToTraverse;
 	
+	auto pushElement = [&](shared_ptr<BST>& element)
+	{
+		if (element != nullptr)
+		{
+			elements.push(element->data);
+			nodeToTraverse.emplace(element);
+		}
+	};
 
-	int leftNode = -1, rightNode = -1;
 	while (distance > 0)
 	{
+		if (nodeToTraverse.empty())
+		{
+			pushElement(root->left);
+			pushElement(root->right);
+			--distance;
+			continue;
+		}
+
 		std::queue<int> empty;
 		std::swap(elements, empty);
-		if (Left != nullptr)
-			elements.push(Left->data);
 
-		if (Right != nullptr)
-			elements.push(Right->data);
+		std::queue<shared_ptr<BST>> emptyNodeToTraverse;
+		std::swap(nodeToTraverse, emptyNodeToTraverse);
 
+		while (!emptyNodeToTraverse.empty())
+		{
+			auto item = emptyNodeToTraverse.front();
+			emptyNodeToTraverse.pop();
+			pushElement(item->left);
+			pushElement(item->right);
+		}
 		--distance;
+		continue;
+	}
+
+	while (!elements.empty())
+	{
+		auto item = elements.front();
+		elements.pop();
+		cout << item << endl;
 	}
 }
 
@@ -145,6 +171,53 @@ void printInOrderTraversal(std::shared_ptr<BST> root)
 	}
 }
 
+
+void printHeightOfTree(std::shared_ptr<BST> root)
+{
+	if (root == nullptr)
+	{
+		cout << "height is 0" << endl;
+		return;
+	}
+
+	std::queue<shared_ptr<BST>> nodeToTraverse;
+
+	auto pushElement = [&](shared_ptr<BST>& element)
+	{
+		if (element != nullptr)
+		{
+			nodeToTraverse.emplace(element);
+		}
+	};
+
+	int height = 0;
+	do
+	{
+		height++;
+
+		if (nodeToTraverse.empty())
+		{
+			pushElement(root->left);
+			pushElement(root->right);
+			continue;
+		}
+
+		std::queue<shared_ptr<BST>> emptyNodeToTraverse;
+		std::swap(nodeToTraverse, emptyNodeToTraverse);
+
+		while (!emptyNodeToTraverse.empty())
+		{
+			auto item = emptyNodeToTraverse.front();
+			emptyNodeToTraverse.pop();
+			pushElement(item->left);
+			pushElement(item->right);
+		}
+		continue;
+	} while (!nodeToTraverse.empty());
+	cout << "height of tree is:" << height << endl;
+}
+
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	std::shared_ptr<BST> bst;
@@ -155,11 +228,21 @@ int _tmain(int argc, _TCHAR* argv[])
 	insert(bst, 25);
 	insert(bst, 75);
 	insert(bst, 555);
+	insert(bst, 10);
+	insert(bst, 13);
+	insert(bst, 600);
+	insert(bst, 525);
+
 	printNodesRecursively(bst);
 	cout << "without recursion" << endl;
 	printNodes(bst);
 	cout << "Inorder traversal" << endl;
 	printInOrderTraversal(bst);
+	cout << "printNodesAt_K_DistanceFromRoot" << endl;
+	printNodesAt_K_DistanceFromRoot(bst, 3);
+	cout << "PrintHeightOfTree" << endl;
+	printHeightOfTree(bst);
+
 	return 0;
 }
 
