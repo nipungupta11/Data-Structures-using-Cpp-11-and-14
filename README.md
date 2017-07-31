@@ -14,11 +14,14 @@ void printNodes(std::shared_ptr<BST>& root)
 -Print nodeswithout recursion, using stack  
 -First print root node, then left sub tree, then right sub tree  
 
-void printNodes(std::shared_ptr<BST>& root)  
 void printNodesAt_K_DistanceFromRoot(std::shared_ptr<BST> root, int distance)  
 -Print all nodes at K distance from Root of binary tree  
--Working on it...  
+-Using queue, fetching each element and corresponding sub-element   
 
 void printInOrderTraversal(std::shared_ptr<BST> root)  
 -Function to print Binary Tree InOrder traversal  
--without recursion, using stack  
+-without recursion, using stack 
+
+void printHeightOfTree(std::shared_ptr<BST> root)
+-Function to print height of binary tree
+-IUse queue to store tree elements and then pops back
