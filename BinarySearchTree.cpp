@@ -217,6 +217,62 @@ void printHeightOfTree(std::shared_ptr<BST> root)
 	cout << "height of tree is:" << height << endl;
 }
 
+//Retruns Binary Tree constructed from a given array
+void constructBSTFromArray(std::shared_ptr<BST>& node, std::vector<int> elements)
+{
+  auto insertNode = [](std::shared_ptr<BST> temp, std::queue<std::shared_ptr<BST>>& qItem, int item)->bool
+  {
+    if (item < temp->data)
+    {
+      //process in left
+      if (temp->left == nullptr)
+      {
+        temp->left = std::make_shared<BST>(item);
+        return true;
+      }
+      qItem.emplace(temp->left);
+    }
+    else
+    {
+      if (temp->right == nullptr)
+      {
+        temp->right = std::make_shared<BST>(item);
+        return true;
+      }
+      qItem.emplace(temp->right);
+    }
+    return false;
+  };
+
+  auto placeInBST = [&](const int& item, std::shared_ptr<BST> tempNode)
+  {
+    if (node == nullptr)
+    {
+      node = std::make_shared<BST>(item);
+      return;
+    }
+
+    std::queue<std::shared_ptr<BST>> qItem;
+
+    if (insertNode(tempNode, qItem, item))
+      return;
+
+    do
+    {
+      auto t = qItem.front();
+      qItem.pop();
+      if (insertNode(t, qItem, item))
+        return;
+    } while (!qItem.empty());
+
+  };
+
+  for (auto var : elements)
+  {
+    placeInBST(var, node);
+  }
+}
+
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -242,6 +298,10 @@ int _tmain(int argc, _TCHAR* argv[])
 	printNodesAt_K_DistanceFromRoot(bst, 3);
 	cout << "PrintHeightOfTree" << endl;
 	printHeightOfTree(bst);
+	cout << "constructBSTFromArray" << endl;
+	std::vector<int> elements{ 10, 15, 13, 11, 9, 7, 16, 14 };
+  	constructBSTFromArray(bst, elements);
+	printNodes(bst);
 
 	return 0;
 }
