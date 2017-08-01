@@ -24,4 +24,9 @@ void printInOrderTraversal(std::shared_ptr<BST> root)
 
 void printHeightOfTree(std::shared_ptr<BST> root)
 -Function to print height of binary tree
--IUse queue to store tree elements and then pops back
+-Used queue to store tree elements and then pops back
+  
+void constructBSTFromArray(std::shared_ptr<BST>& node, std::vector<int> elements)
+-Function to construct a binart tree from a given input array (iteratively)
+-Used queue to store and process tree nodes  
+
