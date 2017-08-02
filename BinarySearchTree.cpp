@@ -218,6 +218,7 @@ void printHeightOfTree(std::shared_ptr<BST> root)
 }
 
 //Retruns Binary Tree constructed from a given array
+//This is another way of inseritng elements iteratively
 void constructBSTFromArray(std::shared_ptr<BST>& node, std::vector<int> elements)
 {
   auto insertNode = [](std::shared_ptr<BST> temp, std::queue<std::shared_ptr<BST>>& qItem, int item)->bool
