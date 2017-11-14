@@ -274,6 +274,70 @@ void constructBSTFromArray(std::shared_ptr<BST>& node, std::vector<int> elements
   }
 }
 
+//Traverse array in such a way that all odd in one side
+//all event in one side
+//Logic: keep 2 index odd and even, initialize them to -1
+//when difference in current array index and odd/even is greater than 1,
+//swap is required of elements
+//increment the odd/even counter based on number wherther it was odd or even
+void TraverseAnyDirection(std::vector<int>& arr)
+{
+  int odd = -1;
+  int even = -1;
+
+  auto isOdd = [](const int& element)->bool
+  {
+    return element % 2;
+  };
+
+  auto swap = [](int& one, int& two)
+  {
+    int temp = one;
+    one = two;
+    two = temp;
+  };
+
+  int index = 0;
+  for (const auto& element : arr)
+  { 
+    if (isOdd(element) == true)
+    {
+      if (odd == -1)
+      {
+        odd = index++;
+        continue;
+      }
+      else if (index - odd > 1)
+      {
+        swap(arr[odd + 1], arr[index]);
+        ++even;
+      }
+      ++odd;
+    }
+    else
+    {
+      if (even == -1)
+      {
+        even = index++;
+        continue;
+      }
+      else if(index - even > 1)
+      {
+        swap(arr[even + 1], arr[index]);
+        ++odd;
+      }
+      ++even;
+    }
+    ++index;
+  }
+
+  //To make sure even in left and odd in right
+  if (isOdd(arr[0]))
+  {
+    std::reverse(arr.begin(), arr.end());
+  }
+}
+
 
 int _tmain(int argc, _TCHAR* argv[])
 {
